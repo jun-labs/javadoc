@@ -1,6 +1,8 @@
 # Javadoc
 
-[Javadoc generates HTML pages of API documentation from Java source files](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html), allowing you to leave comments at the method, class, and package levels. 
+[Javadoc generates HTML pages of API documentation from Java source files](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html), allowing you to leave comments at the method, class, and package levels.
+
+> There is detailed information about Javadoc on the [Oracle documentation.](https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html).
 
 <br/><br/>
 
@@ -45,9 +47,26 @@ $ ./gradlew dokkaHtml       # Kotlin
 
 <br/><br/><br/><br/>
 
-You can also leave package-level comments using package-info.java. [package-info.java](https://www.baeldung.com/java-package-info) is a Java file that allows you to document or comment on the package level. This file allows you to add comments or documentation for the entire package.
+You can also leave package-level comments using package-info.java. [package-info.java](https://www.baeldung.com/java-package-info) is a Java file that allows you to document or comment on the package level. 
 
 ```java
+@NonNullApi
+@NonNullFields
+package project.io.app.core.user.application;
+
+import org.springframework.lang.NonNullApi;
+import org.springframework.lang.NonNullFields;
+```
+
+<br/><br/><br/><br/>
+
+This file allows you to add comments or documentation for the entire package. 
+
+```java
+/**
+ * This package contains user-related service implementations.
+ * All parameters and return values are assumed to be non-null by default.
+ */
 @NonNullApi
 @NonNullFields
 package project.io.app.core.user.application;
@@ -83,6 +102,34 @@ tasks.withType<Javadoc> {
     (options as CoreJavadocOptions).addStringOption("-source-path", directories)
     exclude("**/response/**", "**/request/**")
 }
+```
+
+<br/><br/><br/><br/>
+
+```kotlin
+tasks.withType<Javadoc> {
+    (options as StandardJavadocDocletOptions).apply {
+        encoding = "UTF-8"
+        addStringOption("Xdoclint:all", "-quiet")
+        addStringOption("html5", "-quiet")
+    }
+
+    ... ...
+
+}
+```
+
+```shell
+$ ./gradlew javadoc
+
+> Task :javadoc
+/Users/mac/jun/jun-labs/package-info/src/main/java/project/io/app/core/user/presentation/UserReadApi.java:21: warning: no comment
+    public UserReadApi(final UserService userService) {
+           ^
+/Users/mac/jun/jun-labs/package-info/src/main/java/project/io/app/core/user/application/UserService.java:15: warning: no comment
+    public void execute(final Long userId) {
+                ^
+2 warnings
 ```
 
 <br/><br/><br/><br/>
