@@ -5,6 +5,7 @@ import org.springframework.web.bind.MissingPathVariableException
 import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 import org.springframework.web.servlet.NoHandlerFoundException
 
 @RestControllerAdvice
@@ -14,6 +15,12 @@ class GlobalExceptionHandler {
     internal fun resolveIllegalArgumentException(ex: IllegalArgumentException): ResponseEntity<ErrorResponse> {
         return ResponseEntity.status(400)
             .body(ErrorResponse(400, "IllegalArgumentException."))
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException::class)
+    internal fun resolveMissingPathVariableException(ex: MethodArgumentTypeMismatchException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(400)
+            .body(ErrorResponse(400, "MethodArgumentTypeMismatchException."))
     }
 
     @ExceptionHandler(MissingPathVariableException::class)
